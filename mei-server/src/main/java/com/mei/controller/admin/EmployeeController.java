@@ -6,7 +6,6 @@ import com.mei.dto.EmployeeDTO;
 import com.mei.dto.EmployeeLoginDTO;
 import com.mei.dto.EmployeePageQueryDTO;
 import com.mei.entity.Employee;
-import com.mei.enumeration.OperationType;
 import com.mei.properties.JwtProperties;
 import com.mei.result.PageResult;
 import com.mei.result.Result;
@@ -15,9 +14,7 @@ import com.mei.utils.JwtUtil;
 import com.mei.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.ResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
