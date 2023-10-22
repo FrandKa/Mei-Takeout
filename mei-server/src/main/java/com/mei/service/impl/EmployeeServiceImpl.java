@@ -1,27 +1,27 @@
 package com.mei.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.mei.constant.MessageConstant;
 import com.mei.constant.PasswordConstant;
 import com.mei.constant.StatusConstant;
 import com.mei.context.BaseContext;
 import com.mei.dto.EmployeeDTO;
 import com.mei.dto.EmployeeLoginDTO;
+import com.mei.dto.EmployeePageQueryDTO;
 import com.mei.entity.Employee;
 import com.mei.exception.AccountLockedException;
 import com.mei.exception.AccountNotFoundException;
 import com.mei.exception.PasswordErrorException;
 import com.mei.mapper.EmployeeMapper;
+import com.mei.result.PageResult;
 import com.mei.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.codec.digest.Md5Crypt;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletContext;
 import java.time.LocalDateTime;
 
 @Service
@@ -86,6 +86,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUpdateUser(id);
 
         employeeMapper.insert(employee);
+    }
+
+    @Override
+    public PageResult getEmpList(EmployeePageQueryDTO employeePageQueryDTO) {
+        Page<Object> page = PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        // 这里也是使用ThreadLocal的技术将这些信息存入
+        Page<Employee> data = employeeMapper.queryList(employeePageQueryDTO);
+        log.info("data: {}", data.getResult());
+
+        return new PageResult(data.getTotal(), data.getResult());
     }
 
 }

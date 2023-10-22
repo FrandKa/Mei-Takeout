@@ -3,8 +3,10 @@ package com.mei.controller.admin;
 import com.mei.constant.JwtClaimsConstant;
 import com.mei.dto.EmployeeDTO;
 import com.mei.dto.EmployeeLoginDTO;
+import com.mei.dto.EmployeePageQueryDTO;
 import com.mei.entity.Employee;
 import com.mei.properties.JwtProperties;
+import com.mei.result.PageResult;
 import com.mei.result.Result;
 import com.mei.service.EmployeeService;
 import com.mei.utils.JwtUtil;
@@ -13,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +86,17 @@ public class EmployeeController {
         log.info("req: {}", employeeDTO);
         employeeService.save(employeeDTO);
         return Result.success();
+    }
+
+    // 分页查找员工的信息:
+    @GetMapping("/page")
+    @ApiOperation("分页查找员工信息")
+    public Result<PageResult> getUserInfPage(EmployeePageQueryDTO employeePageQueryDTO) {
+        log.info("员工分页查询: {}", employeePageQueryDTO);
+        PageResult result = employeeService.getEmpList(employeePageQueryDTO);
+
+
+        return Result.success(result);
     }
 
 }
