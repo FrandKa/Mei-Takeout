@@ -79,11 +79,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 设置密码
         String password = DigestUtils.md5Hex(PasswordConstant.DEFAULT_PASSWORD);
         employee.setPassword(password);
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        Long id = BaseContext.getCurrentId();
-        employee.setCreateUser(id);
-        employee.setUpdateUser(id);
 
         employeeMapper.insert(employee);
     }
@@ -107,9 +102,6 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean setEmpStatus(Integer status, Long id) {
-//        Employee employee = new Employee();
-//        employee.setStatus(status);
-//        employee.setId(id);
         Employee employee = Employee.builder().status(status).id(id).build();
 
         int raws = employeeMapper.update(employee);
