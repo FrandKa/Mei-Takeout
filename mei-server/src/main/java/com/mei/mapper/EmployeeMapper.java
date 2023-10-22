@@ -28,4 +28,5 @@ public interface EmployeeMapper {
     // 分页查询:
     Page<Employee> queryList(EmployeePageQueryDTO employeePageQueryDTO);
 
+    int update(Employee employee);
 }

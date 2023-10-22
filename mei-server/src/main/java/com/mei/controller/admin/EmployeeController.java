@@ -1,10 +1,12 @@
 package com.mei.controller.admin;
 
 import com.mei.constant.JwtClaimsConstant;
+import com.mei.constant.MessageConstant;
 import com.mei.dto.EmployeeDTO;
 import com.mei.dto.EmployeeLoginDTO;
 import com.mei.dto.EmployeePageQueryDTO;
 import com.mei.entity.Employee;
+import com.mei.enumeration.OperationType;
 import com.mei.properties.JwtProperties;
 import com.mei.result.PageResult;
 import com.mei.result.Result;
@@ -13,7 +15,9 @@ import com.mei.utils.JwtUtil;
 import com.mei.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.ResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,4 +103,24 @@ public class EmployeeController {
         return Result.success(result);
     }
 
+    /**
+     * 启用禁用账号
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号接口")
+    public Result setEmployeeStatus(
+            @PathVariable("status") Integer status,
+            @RequestParam("id") Long id
+    ) {
+        log.info("启用禁用员工账号: {}, {}", status, id);
+        boolean flag = employeeService.setEmpStatus(status, id);
+        if (flag) {
+            return Result.success();
+        }
+        return Result.error(MessageConstant.ACCOUNT_NOT_FOUND);
+    }
 }

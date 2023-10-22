@@ -19,4 +19,6 @@ public interface EmployeeService {
     void save(EmployeeDTO employeeDTO);
 
     PageResult getEmpList(EmployeePageQueryDTO employeePageQueryDTO);
+
+    boolean setEmpStatus(Integer status, Long id);
 }
