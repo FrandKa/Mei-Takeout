@@ -117,4 +117,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         return raws > 0;
     }
 
+    // 根据id查找员工信息
+    @Override
+    public Employee getEmpById(Long id) {
+        Employee employee = employeeMapper.queryById(id);
+
+        return employee;
+    }
+
+    @Override
+    public boolean updateEmpInf(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        int raws = employeeMapper.update(employee);
+
+        return raws > 0;
+    }
+
 }

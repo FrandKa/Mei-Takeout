@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 员工管理
@@ -123,4 +124,25 @@ public class EmployeeController {
         }
         return Result.error(MessageConstant.ACCOUNT_NOT_FOUND);
     }
+
+    @PutMapping()
+    @ApiOperation("修改员工信息")
+    public Result updateEmpInf(@RequestBody EmployeeDTO employeeDTO) {
+        boolean flag = employeeService.updateEmpInf(employeeDTO);
+        if(flag) {
+            return Result.success();
+        }
+        return Result.error(MessageConstant.ACCOUNT_NOT_FOUND);
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询员工信息")
+    public Result<Employee> getEmpInfById(@PathVariable("id") Long id) {
+        Employee data = employeeService.getEmpById(id);
+        if(Objects.nonNull(data)) {
+            return Result.success(data);
+        }
+        return Result.error(MessageConstant.ACCOUNT_NOT_FOUND);
+    }
+
 }

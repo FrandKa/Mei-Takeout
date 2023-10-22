@@ -21,4 +21,8 @@ public interface EmployeeService {
     PageResult getEmpList(EmployeePageQueryDTO employeePageQueryDTO);
 
     boolean setEmpStatus(Integer status, Long id);
+
+    Employee getEmpById(Long id);
+
+    boolean updateEmpInf(EmployeeDTO employeeDTO);
 }
