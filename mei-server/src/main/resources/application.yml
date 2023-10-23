@@ -37,6 +37,12 @@ mei:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+  aliyun:
+    oss:
+      access-key-id: ${mei.aliyun.oss.access-key-id}
+      access-key-secret: ${mei.aliyun.oss.access-key-secret}
+      bucket-name: ${mei.aliyun.oss.bucket-name}
+      endpoint: ${mei.aliyun.oss.endpoint}
 
 knife4j:
   basic:

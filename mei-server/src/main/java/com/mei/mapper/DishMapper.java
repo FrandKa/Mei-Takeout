@@ -1,5 +1,8 @@
 package com.mei.mapper;
 
+import com.mei.annotation.AutoFill;
+import com.mei.entity.Dish;
+import com.mei.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,4 +17,6 @@ public interface DishMapper {
     @Select("select count(id) from dish where category_id = #{categoryId}")
     Integer countByCategoryId(Long categoryId);
 
+    @AutoFill(OperationType.INSERT)
+    void insert(Dish dish);
 }
