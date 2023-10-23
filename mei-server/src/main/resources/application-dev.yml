@@ -19,3 +19,7 @@ mei:
       access-key-secret: EElWRyJoFogoomLToETR3PRlOdX0rc
       bucket-name: mei-take-out
       endpoint: oss-cn-beijing.aliyuncs.com
+  redis:
+    host: 47.96.76.92
+    port: 6379
+    database: 9
