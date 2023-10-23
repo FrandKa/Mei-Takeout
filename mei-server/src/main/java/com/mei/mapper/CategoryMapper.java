@@ -9,6 +9,7 @@ import com.mei.enumeration.OperationType;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -52,4 +53,7 @@ public interface CategoryMapper {
      * @return
      */
     List<Category> list(Integer type);
+
+    @Select("SELECT name FROM mei_take_out.category WHERE id = #{categoryId}")
+    String queryNameById(Long categoryId);
 }

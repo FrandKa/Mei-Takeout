@@ -2,6 +2,7 @@ package com.mei.mapper;
 
 import com.github.pagehelper.Page;
 import com.mei.annotation.AutoFill;
+import com.mei.dto.DishDTO;
 import com.mei.dto.DishPageQueryDTO;
 import com.mei.entity.Dish;
 import com.mei.enumeration.OperationType;
@@ -32,4 +33,9 @@ public interface DishMapper {
 
     @Delete("DELETE FROM mei_take_out.dish WHERE id = #{id}")
     void deleteById(Long id);
+
+    void deleteByIds(List<Long> list);
+
+    @AutoFill(OperationType.UPDATE)
+    void updateById(Dish dish);
 }

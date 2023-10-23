@@ -95,10 +95,44 @@ public class DishServiceImpl implements DishService {
             if (Objects.nonNull(setMealIds) && !setMealIds.isEmpty()) {
                 throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
             }
-            dishMapper.deleteById(id);
-            dishFlavorMapper.deleteByDishId(id);
         }
 
+        dishMapper.deleteByIds(list);
+        dishFlavorMapper.deleteByDishIds(list);
+
         return true;
+    }
+
+    @Override
+    public DishVO getInfById(Long id) {
+        Dish dish = dishMapper.queryById(id);
+        Long categoryId = dish.getCategoryId();
+        String categoryName = categoryMapper.queryNameById(categoryId);
+        List<DishFlavor> dishFlavors = dishFlavorMapper.queryByDishId(id);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setCategoryName(categoryName);
+        dishVO.setFlavors(dishFlavors);
+
+        return dishVO;
+    }
+
+    @Override
+    public void update(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        Long id = dishDTO.getId();
+        // 1. 修改基础的属性:
+        dishMapper.updateById(dish);
+        // 2. 删除原先的flavor:
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (Objects.nonNull(flavors) && !flavors.isEmpty()) {
+            dishFlavorMapper.deleteByDishId(id);
+            // 3. 写入新的flavor:
+            for (DishFlavor flavor : flavors) {
+                flavor.setDishId(id);
+            }
+            dishFlavorMapper.insertBatch(flavors);
+        }
     }
 }
