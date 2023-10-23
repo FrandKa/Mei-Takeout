@@ -38,7 +38,7 @@ public class DishController {
 
         dishService.saveWithFlavor(dishDTO);
 
-        return null;
+        return Result.success();
     }
 
     @ApiOperation("菜品的分页查询")
