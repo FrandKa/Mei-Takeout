@@ -6,8 +6,11 @@ import com.mei.dto.DishPageQueryDTO;
 import com.mei.entity.Dish;
 import com.mei.enumeration.OperationType;
 import com.mei.vo.DishVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface DishMapper {
@@ -24,4 +27,9 @@ public interface DishMapper {
     void insert(Dish dish);
 
     Page<DishVO> queryPage(DishPageQueryDTO dishPageQueryDTO);
+
+    Dish queryById(Long ids);
+
+    @Delete("DELETE FROM mei_take_out.dish WHERE id = #{id}")
+    void deleteById(Long id);
 }

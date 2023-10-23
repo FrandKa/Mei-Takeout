@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mei.mapper.SetMealDishMapper">
+
+    <select id="getSetMealIdsByDishIds" resultType="java.lang.Long">
+        SELECT setmeal_id
+        FROM mei_take_out.setmeal_dish
+        WHERE dish_id IN
+        <foreach collection="dishIds" separator="," open="(" close=")" item="dishId">
+            #{dishId}
+        </foreach>
+    </select>
+
+</mapper>

@@ -27,4 +27,10 @@
         </where>
         ORDER BY d.create_time DESC
     </select>
+
+    <select id="queryById" resultType="com.mei.entity.Dish">
+            SELECT *
+            FROM mei_take_out.dish
+            WHERE id = #{id};
+    </select>
 </mapper>

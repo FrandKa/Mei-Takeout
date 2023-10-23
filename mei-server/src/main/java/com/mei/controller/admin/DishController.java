@@ -1,5 +1,6 @@
 package com.mei.controller.admin;
 
+import com.mei.constant.MessageConstant;
 import com.mei.dto.DishDTO;
 import com.mei.dto.DishPageQueryDTO;
 import com.mei.result.PageResult;
@@ -10,6 +11,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @program: sky-take-out
@@ -42,5 +47,16 @@ public class DishController {
         PageResult result = dishService.getPageInf(dishPageQueryDTO);
 
         return Result.success(result);
+    }
+
+    @ApiOperation("删除菜品")
+    @DeleteMapping
+    public Result delete(@RequestParam List<Long> ids) {
+        log.info("批量删除菜品: {}", ids);
+        boolean flag = dishService.delete(ids);
+        if(flag) {
+            return Result.success();
+        }
+        return Result.error(MessageConstant.UNKNOWN_ERROR);
     }
 }

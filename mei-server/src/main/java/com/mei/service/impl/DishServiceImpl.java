@@ -2,13 +2,17 @@ package com.mei.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.mei.constant.MessageConstant;
+import com.mei.constant.StatusConstant;
 import com.mei.dto.DishDTO;
 import com.mei.dto.DishPageQueryDTO;
 import com.mei.entity.Dish;
 import com.mei.entity.DishFlavor;
+import com.mei.exception.DeletionNotAllowedException;
 import com.mei.mapper.CategoryMapper;
 import com.mei.mapper.DishFlavorMapper;
 import com.mei.mapper.DishMapper;
+import com.mei.mapper.SetMealDishMapper;
 import com.mei.result.PageResult;
 import com.mei.service.DishService;
 import com.mei.vo.DishVO;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +43,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
+    @Autowired
+    private SetMealDishMapper setMealDishMapper;
 
 
     /**
@@ -70,5 +78,27 @@ public class DishServiceImpl implements DishService {
         log.info("菜品分页查询获得数据: {}", page.getResult());
 
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(List<Long> list) {
+        // 判断是否可以删除:
+        for (Long id : list) {
+            Dish dish = dishMapper.queryById(id);
+            if (Objects.equals(dish.getStatus(), StatusConstant.ENABLE)) {
+                // 1. 是否起售;
+                throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+            }
+            // 2. 是否关联套餐
+            List<Long> setMealIds = setMealDishMapper.getSetMealIdsByDishIds(List.of(id));
+            if (Objects.nonNull(setMealIds) && !setMealIds.isEmpty()) {
+                throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+            }
+            dishMapper.deleteById(id);
+            dishFlavorMapper.deleteByDishId(id);
+        }
+
+        return true;
     }
 }
