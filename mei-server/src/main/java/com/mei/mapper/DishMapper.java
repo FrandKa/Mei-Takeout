@@ -1,8 +1,11 @@
 package com.mei.mapper;
 
+import com.github.pagehelper.Page;
 import com.mei.annotation.AutoFill;
+import com.mei.dto.DishPageQueryDTO;
 import com.mei.entity.Dish;
 import com.mei.enumeration.OperationType;
+import com.mei.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,4 +22,6 @@ public interface DishMapper {
 
     @AutoFill(OperationType.INSERT)
     void insert(Dish dish);
+
+    Page<DishVO> queryPage(DishPageQueryDTO dishPageQueryDTO);
 }

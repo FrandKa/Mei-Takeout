@@ -1,16 +1,15 @@
 package com.mei.controller.admin;
 
 import com.mei.dto.DishDTO;
+import com.mei.dto.DishPageQueryDTO;
+import com.mei.result.PageResult;
 import com.mei.result.Result;
 import com.mei.service.DishService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @program: sky-take-out
@@ -34,5 +33,14 @@ public class DishController {
         dishService.saveWithFlavor(dishDTO);
 
         return null;
+    }
+
+    @ApiOperation("菜品的分页查询")
+    @GetMapping("/page")
+    public Result<PageResult> getPageInf(DishPageQueryDTO dishPageQueryDTO) {
+        log.info("分页查询菜品数据");
+        PageResult result = dishService.getPageInf(dishPageQueryDTO);
+
+        return Result.success(result);
     }
 }

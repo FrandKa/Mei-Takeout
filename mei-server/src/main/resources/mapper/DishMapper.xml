@@ -8,4 +8,23 @@
         VALUES
         (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status});
     </insert>
+
+    <select id="queryPage" resultType="com.mei.vo.DishVO">
+        SELECT d.id, d.name, d.category_id, d.price, d.image, d.description, d.status, d.update_time, c.name as categoryName
+        FROM mei_take_out.dish d
+        LEFT JOIN mei_take_out.category c
+        ON d.category_id = c.id
+        <where>
+            <if test="name != null" >
+                AND d.name like CONCAT('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null" >
+                AND d.category_id = #{categoryId}
+            </if>
+            <if test="status != null" >
+                AND d.status = #{status}
+            </if>
+        </where>
+        ORDER BY d.create_time DESC
+    </select>
 </mapper>

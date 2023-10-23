@@ -1,12 +1,17 @@
 package com.mei.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.mei.dto.DishDTO;
+import com.mei.dto.DishPageQueryDTO;
 import com.mei.entity.Dish;
 import com.mei.entity.DishFlavor;
 import com.mei.mapper.CategoryMapper;
 import com.mei.mapper.DishFlavorMapper;
 import com.mei.mapper.DishMapper;
+import com.mei.result.PageResult;
 import com.mei.service.DishService;
+import com.mei.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +60,15 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    @Override
+    public PageResult getPageInf(DishPageQueryDTO dishPageQueryDTO) {
+        PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
+
+        Page<DishVO> page = dishMapper.queryPage(dishPageQueryDTO);
+        log.info("菜品分页查询获得数据: {}", page.getResult());
+
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }
