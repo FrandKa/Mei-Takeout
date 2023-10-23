@@ -10,6 +10,7 @@ import com.mei.vo.DishVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -38,4 +39,7 @@ public interface DishMapper {
 
     @AutoFill(OperationType.UPDATE)
     void updateById(Dish dish);
+
+    @Update("UPDATE mei_take_out.dish SET status = #{status} WHERE id = #{id}")
+    void updateStatusById(Long id, Integer status);
 }

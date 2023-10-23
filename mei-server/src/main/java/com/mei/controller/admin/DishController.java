@@ -76,4 +76,15 @@ public class DishController {
         return Result.success(dishVO);
     }
 
+    @ApiOperation("启用与禁用菜品接口")
+    @PostMapping("/status/{status}")
+    public Result updateStatus(
+            @PathVariable Integer status,
+            @RequestParam Long id
+    ) {
+        dishService.updateStatusById(id, status);
+
+        return Result.success();
+    }
+
 }
