@@ -11,7 +11,7 @@ import com.mei.entity.Category;
 import com.mei.exception.DeletionNotAllowedException;
 import com.mei.mapper.CategoryMapper;
 import com.mei.mapper.DishMapper;
-import com.mei.mapper.SetmealMapper;
+import com.mei.mapper.SetMealMapper;
 import com.mei.result.PageResult;
 import com.mei.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private DishMapper dishMapper;
     @Autowired
-    private SetmealMapper setmealMapper;
+    private SetMealMapper setmealMapper;
 
     /**
      * 新增分类

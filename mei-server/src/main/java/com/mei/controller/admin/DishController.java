@@ -3,6 +3,7 @@ package com.mei.controller.admin;
 import com.mei.constant.MessageConstant;
 import com.mei.dto.DishDTO;
 import com.mei.dto.DishPageQueryDTO;
+import com.mei.entity.Dish;
 import com.mei.result.PageResult;
 import com.mei.result.Result;
 import com.mei.service.DishService;
@@ -87,4 +88,10 @@ public class DishController {
         return Result.success();
     }
 
+    @ApiOperation("根据分类查询菜品接口")
+    @GetMapping("/list")
+    public Result<List<Dish>> getDishByCategoryId(@RequestParam("categoryId") Long categoryId) {
+        List<Dish> dishList = dishService.getDishByCategoryId(categoryId);
+        return Result.success(dishList);
+    }
 }
