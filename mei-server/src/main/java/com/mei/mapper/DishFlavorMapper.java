@@ -1,8 +1,6 @@
 package com.mei.mapper;
 
-import com.mei.annotation.AutoFill;
 import com.mei.entity.DishFlavor;
-import com.mei.enumeration.OperationType;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
