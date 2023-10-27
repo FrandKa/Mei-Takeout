@@ -10,11 +10,9 @@ import com.mei.mapper.UserMapper;
 import com.mei.properties.WeChatProperties;
 import com.mei.service.UserService;
 import com.mei.utils.HttpClientUtil;
-import com.mei.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

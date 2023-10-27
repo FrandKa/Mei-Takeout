@@ -1,5 +1,6 @@
 package com.mei.controller.admin;
 
+import com.mei.constant.CacheConstant;
 import com.mei.constant.MessageConstant;
 import com.mei.dto.DishDTO;
 import com.mei.dto.DishPageQueryDTO;
@@ -12,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +32,11 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    // TODO KA 2023/10/27 14:39 抽取接口: 修改缓存数据
+    // TODO KA 2023/10/27 14:41 更新数据的时候前端不会刷新问题
+
     @ApiOperation("新增菜品接口")
+    @CacheEvict(value = CacheConstant.DISH_CACHE, key = "#dishDTO.categoryId")
     @PostMapping
     public Result addDish(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品: {}", dishDTO);
@@ -50,6 +56,7 @@ public class DishController {
     }
 
     @ApiOperation("删除菜品")
+    @CacheEvict(value = CacheConstant.DISH_CACHE, allEntries = true)
     @DeleteMapping
     public Result delete(@RequestParam List<Long> ids) {
         log.info("批量删除菜品: {}", ids);
@@ -61,6 +68,7 @@ public class DishController {
     }
 
     @ApiOperation("修改菜品")
+    @CacheEvict(value = CacheConstant.DISH_CACHE, allEntries = true)
     @PutMapping
     public Result update(@RequestBody DishDTO dishDTO) {
         dishService.update(dishDTO);
@@ -76,13 +84,13 @@ public class DishController {
     }
 
     @ApiOperation("启用与禁用菜品接口")
+    @CacheEvict(value = CacheConstant.DISH_CACHE, allEntries = true)
     @PostMapping("/status/{status}")
     public Result updateStatus(
             @PathVariable Integer status,
             @RequestParam Long id
     ) {
         dishService.updateStatusById(id, status);
-
         return Result.success();
     }
 

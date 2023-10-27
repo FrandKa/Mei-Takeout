@@ -4,7 +4,6 @@ import com.mei.constant.JwtClaimsConstant;
 import com.mei.dto.UserLoginDTO;
 import com.mei.entity.User;
 import com.mei.properties.JwtProperties;
-import com.mei.properties.WeChatProperties;
 import com.mei.result.Result;
 import com.mei.service.UserService;
 import com.mei.utils.JwtUtil;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @program: sky-take-out
