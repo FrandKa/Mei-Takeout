@@ -10,4 +10,19 @@
         (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image})
     </insert>
 
+    <select id="queryList" resultType="com.mei.vo.SetmealVO">
+        SELECT s.id, s.category_id, s.name, s.price, s.status, s.description, s.image, s.update_time, c.name AS categoryName
+        FROM mei_take_out.setmeal s
+        LEFT JOIN mei_take_out.category c
+        ON s.category_id = c.id
+        <where>
+            <if test="categoryId != null" >
+                AND s.category_id = #{categoryId}
+            </if>
+            <if test="name != null" >
+                AND s.name = CONCAT('%', #{name},'%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

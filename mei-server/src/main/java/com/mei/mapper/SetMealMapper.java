@@ -1,8 +1,12 @@
 package com.mei.mapper;
 
+import com.github.pagehelper.Page;
 import com.mei.annotation.AutoFill;
+import com.mei.dto.SetmealDTO;
+import com.mei.dto.SetmealPageQueryDTO;
 import com.mei.entity.Setmeal;
 import com.mei.enumeration.OperationType;
+import com.mei.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,4 +23,6 @@ public interface SetMealMapper {
 
     @AutoFill(OperationType.INSERT)
     void insert(Setmeal setmeal);
+
+    Page<SetmealVO> queryList(SetmealPageQueryDTO setmealPageQueryDTO);
 }
