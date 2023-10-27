@@ -70,7 +70,17 @@ public class SetMealController {
     @ApiOperation("修改套餐状态")
     @PostMapping("/status/{status}")
     public Result updateStatus(@PathVariable("status") Integer status, @RequestParam Long id) {
+        log.info("修改套餐状态: {}", status);
         setMealService.updateStatusById(id, status);
+
+        return Result.success();
+    }
+
+    @ApiOperation("批量删除功能")
+    @DeleteMapping
+    public Result delete(@RequestParam("ids") List<Long> ids) {
+        log.info("批量删除套餐: {}", ids);
+        setMealService.delete(ids);
 
         return Result.success();
     }

@@ -15,7 +15,15 @@
         WHERE setmeal_id = #{id};
     </delete>
 
-    <select id="getSetMealIdsByDishIds" resultType="java.lang.Long">
+    <delete id="deleteBySetMealIds">
+        DELETE FROM mei_take_out.setmeal_dish
+        WHERE setmeal_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")" >
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getSetMealIdsByDishIds" resultType="long">
         SELECT setmeal_id
         FROM mei_take_out.setmeal_dish
         WHERE dish_id IN

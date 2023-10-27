@@ -126,4 +126,12 @@ public class SetMealServiceImpl implements SetMealService {
     public void updateStatusById(Long id, Integer status) {
         setMealMapper.updateStatusById(id, status);
     }
+
+    @Override
+    public void delete(List<Long> ids) {
+        // 删除基本数据:
+        setMealMapper.delete(ids);
+        // 删除包含的菜品关联:
+        setMealDishMapper.deleteBySetMealIds(ids);
+    }
 }

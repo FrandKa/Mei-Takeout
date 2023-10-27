@@ -44,4 +44,6 @@ public interface SetMealMapper {
 
     @Update("UPDATE mei_take_out.setmeal SET status = #{status} WHERE id = #{id}")
     void updateStatusById(Long id, Integer status);
+
+    void delete(List<Long> ids);
 }

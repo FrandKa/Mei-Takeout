@@ -31,4 +31,6 @@ public interface SetMealService {
     List<Setmeal> list(Setmeal setmeal);
 
     void updateStatusById(Long id, Integer status);
+
+    void delete(List<Long> ids);
 }

@@ -23,6 +23,14 @@
         WHERE id = #{id}
     </update>
 
+    <delete id="delete">
+        DELETE FROM mei_take_out.setmeal
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")" >
+            #{id}
+        </foreach>
+    </delete>
+
     <select id="queryList" resultType="com.mei.vo.SetmealVO">
         SELECT s.id, s.category_id, s.name, s.price, s.status, s.description, s.image, s.update_time, c.name AS categoryName
         FROM mei_take_out.setmeal s
