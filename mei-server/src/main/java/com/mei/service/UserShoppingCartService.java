@@ -1,6 +1,9 @@
 package com.mei.service;
 
 import com.mei.dto.ShoppingCartDTO;
+import com.mei.entity.ShoppingCart;
+
+import java.util.List;
 
 /**
  * @program: sky-take-out
@@ -12,4 +15,6 @@ import com.mei.dto.ShoppingCartDTO;
 public interface UserShoppingCartService {
 
     void add(ShoppingCartDTO shoppingCartDTO);
+
+    List<ShoppingCart> getList();
 }

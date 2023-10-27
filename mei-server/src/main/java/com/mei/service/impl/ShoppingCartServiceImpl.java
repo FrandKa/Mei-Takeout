@@ -77,4 +77,11 @@ public class ShoppingCartServiceImpl implements UserShoppingCartService {
         first.setNumber(first.getNumber() + 1);
         shoppingCartMapper.updateNumberById(first);
     }
+
+    @Override
+    public List<ShoppingCart> getList() {
+        Long userId = BaseContext.getCurrentId();
+        List<ShoppingCart> list = shoppingCartMapper.queryListByUserId(userId);
+        return list;
+    }
 }

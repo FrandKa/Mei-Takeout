@@ -1,16 +1,16 @@
 package com.mei.controller.user;
 
 import com.mei.dto.ShoppingCartDTO;
+import com.mei.entity.ShoppingCart;
 import com.mei.result.Result;
 import com.mei.service.UserShoppingCartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @program: sky-take-out
@@ -34,5 +34,12 @@ public class UserShoppingCartController {
         userShoppingCartService.add(shoppingCartDTO);
 
         return Result.success();
+    }
+
+    @ApiOperation("查看购物车接口")
+    @GetMapping("/list")
+    public Result<List<ShoppingCart>> getList() {
+        List<ShoppingCart> data = userShoppingCartService.getList();
+        return Result.success(data);
     }
 }
