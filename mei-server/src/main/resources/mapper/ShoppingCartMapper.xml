@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mei.mapper.ShoppingCartMapper">
+
+    <insert id="insert">
+        INSERT INTO mei_take_out.shopping_cart
+        (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time)
+        VALUES
+        (#{name}, #{image}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{number}, #{amount}, #{createTime}) ;
+    </insert>
+
+    <update id="updateNumberById">
+        UPDATE mei_take_out.shopping_cart
+        SET number = #{number}
+        WHERE id = #{id};
+    </update>
+
+    <select id="list" resultType="com.mei.entity.ShoppingCart">
+        SELECT *
+        FROM mei_take_out.shopping_cart
+        <where>
+            <if test="userId != null" >
+                AND user_id = #{userId}
+            </if>
+            <if test="dishId != null" >
+                AND dish_id = #{dishId}
+            </if>
+            <if test="setmealId != null" >
+                AND setmeal_id = #{setmealId}
+            </if>
+            <if test="dishFlavor != null" >
+                AND dish_flavor = #{dishFlavor}
+            </if>
+        </where>
+    </select>
+</mapper>
