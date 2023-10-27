@@ -6,10 +6,12 @@ import com.mei.dto.SetmealDTO;
 import com.mei.dto.SetmealPageQueryDTO;
 import com.mei.entity.Setmeal;
 import com.mei.entity.SetmealDish;
+import com.mei.mapper.CategoryMapper;
 import com.mei.mapper.SetMealDishMapper;
 import com.mei.mapper.SetMealMapper;
 import com.mei.result.PageResult;
 import com.mei.service.SetMealService;
+import com.mei.vo.DishItemVO;
 import com.mei.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +35,9 @@ public class SetMealServiceImpl implements SetMealService {
 
     @Autowired
     private SetMealDishMapper setMealDishMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Override
     public void saveSetzMeal(SetmealDTO setmealDTO) {
@@ -64,5 +69,61 @@ public class SetMealServiceImpl implements SetMealService {
         pageResult.setTotal(res.getTotal());
         pageResult.setRecords(res.getResult());
         return pageResult;
+    }
+
+    @Override
+    public SetmealVO getInfById(Long id) {
+        SetmealVO setmealVO = new SetmealVO();
+        Setmeal setmeal = setMealMapper.querySetMealById(id);
+        Long setMealId = setmeal.getId();
+        Long categoryId = setmeal.getCategoryId();
+        List<SetmealDish> setMealIdsByDishIds = setMealDishMapper.querySetMealDishBySetMealId(setMealId);
+        String categoryName = categoryMapper.queryNameById(categoryId);
+        BeanUtils.copyProperties(setmeal, setmealVO);
+        setmealVO.setSetmealDishes(setMealIdsByDishIds);
+        setmealVO.setName(categoryName);
+        return setmealVO;
+    }
+
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+        Long id = setmealDTO.getId();
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setMealMapper.update(setmeal);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        // TODO KA 2023/10/27 13:46 SQL优化
+        if(Objects.isNull(setmealDishes) || setmealDishes.isEmpty()) {
+            return;
+        }
+        setMealDishMapper.deleteBySetMealId(id);
+        for (SetmealDish setmealDish : setmealDishes) {
+            setmealDish.setSetmealId(id);
+            setMealDishMapper.insert(setmealDish);
+        }
+    }
+
+    /**
+     * 条件查询
+     * @param setmeal
+     * @return
+     */
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> list = setMealMapper.list(setmeal);
+        return list;
+    }
+
+    /**
+     * 根据id查询菜品选项
+     * @param id
+     * @return
+     */
+    public List<DishItemVO> getDishItemById(Long id) {
+        return setMealMapper.getDishItemBySetmealId(id);
+    }
+
+    @Override
+    public void updateStatusById(Long id, Integer status) {
+        setMealMapper.updateStatusById(id, status);
     }
 }

@@ -10,6 +10,19 @@
         (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image})
     </insert>
 
+    <update id="update">
+        UPDATE mei_take_out.setmeal
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
     <select id="queryList" resultType="com.mei.vo.SetmealVO">
         SELECT s.id, s.category_id, s.name, s.price, s.status, s.description, s.image, s.update_time, c.name AS categoryName
         FROM mei_take_out.setmeal s
@@ -21,6 +34,27 @@
             </if>
             <if test="name != null" >
                 AND s.name = CONCAT('%', #{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="querySetMealById" resultType="com.mei.entity.Setmeal">
+        SELECT *
+        FROM mei_take_out.setmeal
+        WHERE id = #{id};
+    </select>
+
+    <select id="list" parameterType="Setmeal" resultType="Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
             </if>
         </where>
     </select>

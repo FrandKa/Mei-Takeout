@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -142,7 +143,20 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public List<Dish> getDishByCategoryId(Long categoryId) {
-        List<Dish> dishs = dishMapper.queryByCategoryId(categoryId);
-        return dishs;
+        List<Dish> dishes = dishMapper.queryByCategoryId(categoryId);
+        return dishes;
+    }
+
+    @Override
+    public List<DishVO> getDishesByCategoryId(Long categoryId) {
+        // TODO KA 2023/10/27 13:46 优化查询
+        List<Dish> dishes = dishMapper.queryByCategoryId(categoryId);
+        List<Long> dishIds = dishes.stream().map(Dish::getId).toList();
+        List<DishVO> data = new ArrayList<>();
+        for (Long dishId : dishIds) {
+            DishVO dish = this.getInfById(dishId);
+            data.add(dish);
+        }
+        return data;
     }
 }

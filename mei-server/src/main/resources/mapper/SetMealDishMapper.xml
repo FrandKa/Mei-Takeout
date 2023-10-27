@@ -10,6 +10,11 @@
         (#{setmealId}, #{dishId}, #{name}, #{price}, #{copies})
     </insert>
 
+    <delete id="deleteBySetMealId">
+        DELETE FROM mei_take_out.setmeal_dish
+        WHERE setmeal_id = #{id};
+    </delete>
+
     <select id="getSetMealIdsByDishIds" resultType="java.lang.Long">
         SELECT setmeal_id
         FROM mei_take_out.setmeal_dish
@@ -17,6 +22,11 @@
         <foreach collection="dishIds" separator="," open="(" close=")" item="dishId">
             #{dishId}
         </foreach>
+    </select>
+    <select id="querySetMealDishBySetMealId" resultType="com.mei.entity.SetmealDish">
+        SELECT *
+        FROM mei_take_out.setmeal_dish
+        WHERE setmeal_id = #{id}
     </select>
 
 </mapper>

@@ -2,7 +2,12 @@ package com.mei.service;
 
 import com.mei.dto.SetmealDTO;
 import com.mei.dto.SetmealPageQueryDTO;
+import com.mei.entity.Setmeal;
 import com.mei.result.PageResult;
+import com.mei.vo.DishItemVO;
+import com.mei.vo.SetmealVO;
+
+import java.util.List;
 
 /**
  * @program: sky-take-out
@@ -16,4 +21,14 @@ public interface SetMealService {
 
 
     PageResult getPage(SetmealPageQueryDTO setmealDTO);
+
+    SetmealVO getInfById(Long id);
+
+    void update(SetmealDTO setmealDTO);
+
+    List<DishItemVO> getDishItemById(Long id);
+
+    List<Setmeal> list(Setmeal setmeal);
+
+    void updateStatusById(Long id, Integer status);
 }

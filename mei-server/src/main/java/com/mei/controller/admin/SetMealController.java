@@ -49,5 +49,29 @@ public class SetMealController {
         return Result.success(page);
     }
 
+    @ApiOperation("根据id查套餐信息")
+    @GetMapping("/{id}")
+    public Result<SetmealVO> getInfById(@PathVariable Long id) {
+        log.info("根据id获取套餐信息 id: {}", id);
+        SetmealVO setmealVO = setMealService.getInfById(id);
 
+        return Result.success(setmealVO);
+    }
+
+    @ApiOperation("修改套餐信息")
+    @PutMapping
+    public Result update(@RequestBody SetmealDTO setmealDTO) {
+        log.info("修改套餐信息: {}", setmealDTO);
+        setMealService.update(setmealDTO);
+
+        return Result.success();
+    }
+
+    @ApiOperation("修改套餐状态")
+    @PostMapping("/status/{status}")
+    public Result updateStatus(@PathVariable("status") Integer status, @RequestParam Long id) {
+        setMealService.updateStatusById(id, status);
+
+        return Result.success();
+    }
 }
