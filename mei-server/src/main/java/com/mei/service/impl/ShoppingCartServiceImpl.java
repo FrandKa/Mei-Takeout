@@ -38,9 +38,9 @@ public class ShoppingCartServiceImpl implements UserShoppingCartService {
 
     @Override
     public void add(ShoppingCartDTO shoppingCartDTO) {
+        Long userId = BaseContext.getCurrentId();
         ShoppingCart shoppingCart = new ShoppingCart();
         // 首先需要判断商品是否已经存在了
-        Long userId = BaseContext.getCurrentId();
         BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
         shoppingCart.setUserId(userId);
         List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
@@ -83,5 +83,29 @@ public class ShoppingCartServiceImpl implements UserShoppingCartService {
         Long userId = BaseContext.getCurrentId();
         List<ShoppingCart> list = shoppingCartMapper.queryListByUserId(userId);
         return list;
+    }
+
+    @Override
+    public void cleanShoppingCart() {
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void deleteOne(ShoppingCartDTO shoppingCartDTO) {
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(userId);
+        // 1. 判断当前商品的数量: 如果只有一件直接删除, 如果有多个number - 1;
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        ShoppingCart data = list.get(0);
+        Integer number = data.getNumber();
+        if(number > 1) {
+            data.setNumber(number - 1);
+            shoppingCartMapper.updateNumberById(data);
+            return;
+        }
+        shoppingCartMapper.deleteById(data.getId());
     }
 }

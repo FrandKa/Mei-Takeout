@@ -15,6 +15,11 @@
         WHERE id = #{id};
     </update>
 
+    <delete id="deleteById">
+        DELETE FROM mei_take_out.shopping_cart
+        WHERE id = #{id} ;
+    </delete>
+
     <select id="list" resultType="com.mei.entity.ShoppingCart">
         SELECT *
         FROM mei_take_out.shopping_cart

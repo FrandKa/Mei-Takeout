@@ -1,6 +1,7 @@
 package com.mei.mapper;
 
 import com.mei.entity.ShoppingCart;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -16,4 +17,9 @@ public interface ShoppingCartMapper {
 
     @Select("SELECT * FROM mei_take_out.shopping_cart WHERE user_id = #{userId} ;")
     List<ShoppingCart> queryListByUserId(Long userId);
+
+    @Delete("DELETE FROM mei_take_out.shopping_cart WHERE user_id = #{userId}")
+    void deleteAllByUserId(Long userId);
+
+    void deleteById(Long id);
 }
