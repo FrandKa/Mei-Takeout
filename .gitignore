@@ -4,5 +4,5 @@
 *.class
 *Test.java
 *TEst.java
-application-dev.yaml
 **/test/
+application-dev.yaml
