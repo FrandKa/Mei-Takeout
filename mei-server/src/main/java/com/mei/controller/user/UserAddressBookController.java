@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/user/addressBook")
 @Api(tags = "C端地址簿接口")
 public class UserAddressBookController {
-
     @Autowired
     private AddressBookService addressBookService;
 
