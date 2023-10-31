@@ -41,4 +41,6 @@ public interface OrderMapper {
     void cancel(OrdersCancelDTO ordersCancelDTO);
 
     Page<Orders> queryOrderList(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    Integer countStatus(Integer status);
 }

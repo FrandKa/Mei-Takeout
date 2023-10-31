@@ -8,6 +8,7 @@ import com.mei.dto.OrdersSubmitDTO;
 import com.mei.entity.OrderDetail;
 import com.mei.result.PageResult;
 import com.mei.vo.OrderPaymentVO;
+import com.mei.vo.OrderStatisticsVO;
 import com.mei.vo.OrderSubmitVO;
 import com.mei.vo.OrderVO;
 
@@ -42,4 +43,8 @@ public interface OrderService {
     void cancel(OrdersCancelDTO ordersCancelDTO);
 
     PageResult getOrderPage(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    OrderStatisticsVO getOrderStatistics();
+
+    void receiveOrder(Long id);
 }

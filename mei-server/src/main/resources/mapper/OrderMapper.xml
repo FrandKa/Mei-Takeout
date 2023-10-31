@@ -86,4 +86,10 @@
         </where>
     </select>
 
+    <select id="countStatus" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM mei_take_out.orders
+        WHERE status = #{status};
+    </select>
+
 </mapper>

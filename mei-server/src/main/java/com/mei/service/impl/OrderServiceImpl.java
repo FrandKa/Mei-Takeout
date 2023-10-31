@@ -19,6 +19,7 @@ import com.mei.result.PageResult;
 import com.mei.service.OrderService;
 import com.mei.utils.WeChatPayUtil;
 import com.mei.vo.OrderPaymentVO;
+import com.mei.vo.OrderStatisticsVO;
 import com.mei.vo.OrderSubmitVO;
 import com.mei.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
@@ -230,5 +231,20 @@ public class OrderServiceImpl implements OrderService {
             data.add(orderVO);
         }
         return new PageResult(total, data);
+    }
+
+    @Override
+    public OrderStatisticsVO getOrderStatistics() {
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        orderStatisticsVO.setConfirmed(orderMapper.countStatus(Orders.CONFIRMED));
+        orderStatisticsVO.setDeliveryInProgress(orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS));
+        orderStatisticsVO.setToBeConfirmed(orderMapper.countStatus(Orders.TO_BE_CONFIRMED));
+        return orderStatisticsVO;
+    }
+
+    @Override
+    public void receiveOrder(Long id) {
+        // 将status改为3;
+        orderMapper.updateStatusById(id, Orders.CONFIRMED);
     }
 }
