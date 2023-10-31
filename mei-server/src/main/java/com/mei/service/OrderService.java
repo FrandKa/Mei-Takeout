@@ -1,6 +1,7 @@
 package com.mei.service;
 
 
+import com.mei.dto.OrdersCancelDTO;
 import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.dto.OrdersPaymentDTO;
 import com.mei.dto.OrdersSubmitDTO;
@@ -38,5 +39,7 @@ public interface OrderService {
 
     OrderVO getOrderDetail(Long orderId);
 
-    void cancel(Long orderId);
+    void cancel(OrdersCancelDTO ordersCancelDTO);
+
+    PageResult getOrderPage(OrdersPageQueryDTO ordersPageQueryDTO);
 }

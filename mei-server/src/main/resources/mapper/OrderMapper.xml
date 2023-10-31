@@ -49,10 +49,41 @@
         WHERE id = #{id};
     </update>
 
+    <update id="cancel">
+        UPDATE mei_take_out.orders
+        SET status = #{status}, cancel_time = NOW()
+        <if test="cancelReason != null" >
+            , cancel_reason = #{cancelReason}
+        </if>
+        WHERE id = #{id};
+    </update>
+
     <select id="queryOrderListByUserId" resultType="com.mei.entity.Orders">
         SELECT *
         FROM mei_take_out.orders
         WHERE user_id = #{userId}
+    </select>
+
+    <select id="queryOrderList" resultType="com.mei.entity.Orders">
+        SELECT *
+        FROM mei_take_out.orders
+        <where>
+            <if test="number != null" >
+                AND number = #{number}
+            </if>
+            <if test="phone != null" >
+                AND phone = #{phone}
+            </if>
+            <if test="status != null" >
+                AND status = #{status}
+            </if>
+            <if test="endTime != null" >
+                AND order_time &lt;= #{endTime}
+            </if>
+            <if test="beginTime != null" >
+                AND order_time >= #{beginTime}
+            </if>
+        </where>
     </select>
 
 </mapper>

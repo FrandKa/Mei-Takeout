@@ -1,6 +1,8 @@
 package com.mei.mapper;
 
 import com.github.pagehelper.Page;
+import com.mei.dto.OrdersCancelDTO;
+import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -35,4 +37,8 @@ public interface OrderMapper {
     Orders queryOrderById(Long id);
 
     void updateStatusById(Long id, Integer status);
+
+    void cancel(OrdersCancelDTO ordersCancelDTO);
+
+    Page<Orders> queryOrderList(OrdersPageQueryDTO ordersPageQueryDTO);
 }

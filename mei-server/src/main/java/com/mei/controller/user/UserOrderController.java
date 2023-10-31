@@ -1,9 +1,6 @@
 package com.mei.controller.user;
 
-import com.mei.dto.OrdersPageQueryDTO;
-import com.mei.dto.OrdersPaymentDTO;
-import com.mei.dto.OrdersSubmitDTO;
-import com.mei.dto.ShoppingCartDTO;
+import com.mei.dto.*;
 import com.mei.entity.OrderDetail;
 import com.mei.result.PageResult;
 import com.mei.result.Result;
@@ -106,7 +103,9 @@ public class UserOrderController {
     @ApiOperation("取消订单")
     @PutMapping("/cancel/{id}")
     public Result cancel(@PathVariable("id") Long orderId) {
-        orderService.cancel(orderId);
+        OrdersCancelDTO ordersCancelDTO = new OrdersCancelDTO();
+        ordersCancelDTO.setId(orderId);
+        orderService.cancel(ordersCancelDTO);
 
         return Result.success();
     }

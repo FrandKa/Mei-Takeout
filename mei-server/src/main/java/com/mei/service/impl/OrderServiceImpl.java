@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mei.constant.MessageConstant;
 import com.mei.context.BaseContext;
+import com.mei.dto.OrdersCancelDTO;
 import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.dto.OrdersPaymentDTO;
 import com.mei.dto.OrdersSubmitDTO;
@@ -203,8 +204,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void cancel(Long orderId) {
-        // TODO KA 2023/10/31 11:14 没有提交取消原因数据
-        orderMapper.updateStatusById(orderId, Orders.CANCELLED);
+    public void cancel(OrdersCancelDTO ordersCancelDTO) {
+        orderMapper.cancel(ordersCancelDTO);
+    }
+
+    // 管理端获取订单信息:
+    @Override
+    public PageResult getOrderPage(OrdersPageQueryDTO ordersPageQueryDTO) {
+        int pageNumber = ordersPageQueryDTO.getPage();
+        int pageSize = ordersPageQueryDTO.getPageSize();
+        PageHelper.startPage(pageNumber, pageSize);
+        Page<Orders> page = orderMapper.queryOrderList(ordersPageQueryDTO);
+        long total = page.getTotal();
+        List<Orders> list = page.getResult();
+        if(Objects.isNull(list) || list.isEmpty()) {
+            return new PageResult(0L, new ArrayList());
+        }
+        List<OrderVO> data = new ArrayList<>();
+        for (Orders orders : list) {
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(orders, orderVO);
+            Long orderId = orders.getId();
+            List<OrderDetail> detailList = orderDetailMapper.queryByOrderId(orderId);
+            orderVO.setOrderDetailList(detailList);
+            data.add(orderVO);
+        }
+        return new PageResult(total, data);
     }
 }
