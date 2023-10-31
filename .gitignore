@@ -4,5 +4,5 @@
 *.class
 *Test.java
 *TEst.java
-application-*.*
+application-dev.yml
 **/test/
