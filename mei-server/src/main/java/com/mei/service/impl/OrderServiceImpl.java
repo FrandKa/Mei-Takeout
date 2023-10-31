@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mei.constant.MessageConstant;
 import com.mei.context.BaseContext;
+import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.dto.OrdersPaymentDTO;
 import com.mei.dto.OrdersSubmitDTO;
 import com.mei.entity.*;
@@ -13,10 +14,12 @@ import com.mei.exception.AddressBookBusinessException;
 import com.mei.exception.OrderBusinessException;
 import com.mei.exception.ShoppingCartBusinessException;
 import com.mei.mapper.*;
+import com.mei.result.PageResult;
 import com.mei.service.OrderService;
 import com.mei.utils.WeChatPayUtil;
 import com.mei.vo.OrderPaymentVO;
 import com.mei.vo.OrderSubmitVO;
+import com.mei.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -165,4 +165,46 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+    @Override
+    public PageResult getHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        int pageNumber = ordersPageQueryDTO.getPage();
+        int pageSize = ordersPageQueryDTO.getPageSize();
+        PageHelper.startPage(pageNumber, pageSize);
+        Long userId = BaseContext.getCurrentId();
+        Page<Orders> page = orderMapper.queryOrderListByUserId(userId);
+        long total = page.getTotal();
+        List<Orders> list = page.getResult();
+        if(Objects.isNull(list) || list.isEmpty()) {
+            return new PageResult(0L, new ArrayList());
+        }
+        List<OrderVO> data = new ArrayList<>();
+        for (Orders orders : list) {
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(orders, orderVO);
+            Long orderId = orders.getId();
+            List<OrderDetail> detailList = orderDetailMapper.queryByOrderId(orderId);
+            orderVO.setOrderDetailList(detailList);
+            data.add(orderVO);
+        }
+        log.info("查询到用户: {} 的历史订单数据: {}", userId, list);
+        return new PageResult(total, data);
+    }
+
+    @Override
+    public OrderVO getOrderDetail(Long orderId) {
+        Orders orders = orderMapper.queryOrderById(orderId);
+        List<OrderDetail> detailList = orderDetailMapper.queryByOrderId(orderId);
+        log.info("查询id: {} 订单详情: {}", orderId, detailList);
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders, orderVO);
+        orderVO.setOrderDetailList(detailList);
+
+        return orderVO;
+    }
+
+    @Override
+    public void cancel(Long orderId) {
+        // TODO KA 2023/10/31 11:14 没有提交取消原因数据
+        orderMapper.updateStatusById(orderId, Orders.CANCELLED);
+    }
 }

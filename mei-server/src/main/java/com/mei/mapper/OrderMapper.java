@@ -1,5 +1,6 @@
 package com.mei.mapper;
 
+import com.github.pagehelper.Page;
 import com.mei.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -28,4 +29,10 @@ public interface OrderMapper {
      */
     void update(Orders orders);
 
+    Page<Orders> queryOrderListByUserId(Long userId);
+
+    @Select("SELECT * FROM mei_take_out.orders WHERE id = #{id} ;")
+    Orders queryOrderById(Long id);
+
+    void updateStatusById(Long id, Integer status);
 }

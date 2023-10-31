@@ -1,10 +1,16 @@
 package com.mei.service;
 
 
+import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.dto.OrdersPaymentDTO;
 import com.mei.dto.OrdersSubmitDTO;
+import com.mei.entity.OrderDetail;
+import com.mei.result.PageResult;
 import com.mei.vo.OrderPaymentVO;
 import com.mei.vo.OrderSubmitVO;
+import com.mei.vo.OrderVO;
+
+import java.util.List;
 
 public interface OrderService {
 
@@ -28,4 +34,9 @@ public interface OrderService {
      */
     void paySuccess(String outTradeNo);
 
+    PageResult getHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    OrderVO getOrderDetail(Long orderId);
+
+    void cancel(Long orderId);
 }

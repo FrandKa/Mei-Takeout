@@ -42,5 +42,17 @@
         </set>
         where id = #{id}
     </update>
+<!--    取消订单, 修改数据: status >> 6; cancel_time, cancel_reason -->
+    <update id="updateStatusById">
+        UPDATE mei_take_out.orders
+        SET status = #{status}, cancel_time = NOW()
+        WHERE id = #{id};
+    </update>
+
+    <select id="queryOrderListByUserId" resultType="com.mei.entity.Orders">
+        SELECT *
+        FROM mei_take_out.orders
+        WHERE user_id = #{userId}
+    </select>
 
 </mapper>
