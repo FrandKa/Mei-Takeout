@@ -1,10 +1,7 @@
 package com.mei.service;
 
 
-import com.mei.dto.OrdersCancelDTO;
-import com.mei.dto.OrdersPageQueryDTO;
-import com.mei.dto.OrdersPaymentDTO;
-import com.mei.dto.OrdersSubmitDTO;
+import com.mei.dto.*;
 import com.mei.entity.OrderDetail;
 import com.mei.result.PageResult;
 import com.mei.vo.OrderPaymentVO;
@@ -46,5 +43,7 @@ public interface OrderService {
 
     OrderStatisticsVO getOrderStatistics();
 
-    void receiveOrder(Long id);
+    void receiveOrder(OrdersConfirmDTO ordersConfirmDTO);
+
+    void rejectOrder(OrdersRejectionDTO ordersRejectionDTO);
 }

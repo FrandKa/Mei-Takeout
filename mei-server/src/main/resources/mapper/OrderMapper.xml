@@ -58,6 +58,12 @@
         WHERE id = #{id};
     </update>
 
+    <update id="rejectByOrderId">
+        UPDATE mei_take_out.orders
+        SET status = 6, cancel_time = NOW(), rejection_reason = #{rejectionReason}
+        WHERE id = #{id};
+    </update>
+
     <select id="queryOrderListByUserId" resultType="com.mei.entity.Orders">
         SELECT *
         FROM mei_take_out.orders

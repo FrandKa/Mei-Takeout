@@ -43,4 +43,6 @@ public interface OrderMapper {
     Page<Orders> queryOrderList(OrdersPageQueryDTO ordersPageQueryDTO);
 
     Integer countStatus(Integer status);
+
+    void rejectByOrderId(Long id, String rejectionReason);
 }

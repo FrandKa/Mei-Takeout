@@ -1,7 +1,9 @@
 package com.mei.controller.admin;
 
 import com.github.pagehelper.Page;
+import com.mei.dto.OrdersConfirmDTO;
 import com.mei.dto.OrdersPageQueryDTO;
+import com.mei.dto.OrdersRejectionDTO;
 import com.mei.result.PageResult;
 import com.mei.result.Result;
 import com.mei.service.OrderService;
@@ -30,6 +32,7 @@ public class OrderController {
     @ApiOperation("订单搜索功能")
     @GetMapping("/conditionSearch")
     public Result<PageResult> getOrderPage(OrdersPageQueryDTO ordersPageQueryDTO) {
+        log.info("搜索订单: {}", ordersPageQueryDTO);
         PageResult result = orderService.getOrderPage(ordersPageQueryDTO);
 
         return Result.success(result);
@@ -38,6 +41,7 @@ public class OrderController {
     @ApiOperation("查询订单详情")
     @GetMapping("/details/{id}")
     public Result<OrderVO> getOrderDetail(@PathVariable("id") Long orderId) {
+        log.info("查看订单详情: {}", orderId);
         OrderVO orderDetail = orderService.getOrderDetail(orderId);
         return Result.success(orderDetail);
     }
@@ -45,6 +49,7 @@ public class OrderController {
     @ApiOperation("各个状态的订单数量统计")
     @GetMapping("/statistics")
     public Result<OrderStatisticsVO> getOrderStatistics() {
+        log.info("各个状态的订单数量统计");
         OrderStatisticsVO data = orderService.getOrderStatistics();
 
         return Result.success(data);
@@ -52,8 +57,18 @@ public class OrderController {
 
     @ApiOperation("接单")
     @PutMapping("/confirm")
-    public Result receiveOrder(@RequestBody Long id) {
-        orderService.receiveOrder(id);
+    public Result receiveOrder(@RequestBody OrdersConfirmDTO ordersConfirmDTO) {
+        log.info("接单: {}", ordersConfirmDTO);
+        orderService.receiveOrder(ordersConfirmDTO);
+
+        return Result.success();
+    }
+
+    @ApiOperation("拒单")
+    @PutMapping("/rejection")
+    public Result rejectOrder(@RequestBody OrdersRejectionDTO ordersRejectionDTO) {
+        log.info("拒单: {}", ordersRejectionDTO);
+        orderService.rejectOrder(ordersRejectionDTO);
 
         return Result.success();
     }

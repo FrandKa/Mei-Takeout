@@ -6,10 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mei.constant.MessageConstant;
 import com.mei.context.BaseContext;
-import com.mei.dto.OrdersCancelDTO;
-import com.mei.dto.OrdersPageQueryDTO;
-import com.mei.dto.OrdersPaymentDTO;
-import com.mei.dto.OrdersSubmitDTO;
+import com.mei.dto.*;
 import com.mei.entity.*;
 import com.mei.exception.AddressBookBusinessException;
 import com.mei.exception.OrderBusinessException;
@@ -243,8 +240,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void receiveOrder(Long id) {
+    public void receiveOrder(OrdersConfirmDTO ordersConfirmDTO) {
         // 将status改为3;
-        orderMapper.updateStatusById(id, Orders.CONFIRMED);
+        orderMapper.updateStatusById(ordersConfirmDTO.getId(), Orders.CONFIRMED);
+    }
+
+    @Override
+    public void rejectOrder(OrdersRejectionDTO ordersRejectionDTO) {
+        Long orderId = ordersRejectionDTO.getId();
+        String rejectionReason = ordersRejectionDTO.getRejectionReason();
+        orderMapper.rejectByOrderId(orderId, rejectionReason);
     }
 }
