@@ -4,6 +4,5 @@
 *.class
 *Test.java
 *TEst.java
-application-dev.yml
-application-dev.yaml
+mei-server/src/main/resources/application.yml
 **/test/
