@@ -20,6 +20,7 @@ import com.mei.vo.OrderPaymentVO;
 import com.mei.vo.OrderStatisticsVO;
 import com.mei.vo.OrderSubmitVO;
 import com.mei.vo.OrderVO;
+import com.mei.webSocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class OrderServiceImpl implements OrderService {
     private WeChatPayUtil weChatPayUtil;
     @Autowired
     private BaiduPositionUtil baiduPositionUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -138,6 +141,13 @@ public class OrderServiceImpl implements OrderService {
         orders.setPayStatus(Orders.PAID);
 
         orderMapper.update(orders);
+        Map map = new HashMap();
+        map.put("type", 1);//消息类型，1表示来单提醒
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号：" + orders.getNumber());
+
+        //通过WebSocket实现来单提醒，向客户端浏览器推送消息
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
 
         return null;
     }
@@ -238,5 +248,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deliveryOrder(Long id) {
         orderMapper.updateStatusById(id, Orders.DELIVERY_IN_PROGRESS);
+    }
+
+    @Override
+    public String getOrderNumberById(Long orderId) {
+        String orderNumber = orderMapper.queryOrderNumberById(orderId);
+        return orderNumber;
     }
 }

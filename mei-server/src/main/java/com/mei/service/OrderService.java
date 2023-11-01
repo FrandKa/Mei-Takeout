@@ -44,4 +44,6 @@ public interface OrderService {
     void completeOrder(Long id);
 
     void deliveryOrder(Long id);
+
+    String getOrderNumberById(Long orderId);
 }

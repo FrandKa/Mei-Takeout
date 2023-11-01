@@ -1,5 +1,6 @@
 package com.mei.controller.user;
 
+import com.alibaba.fastjson.JSON;
 import com.mei.dto.*;
 import com.mei.entity.OrderDetail;
 import com.mei.result.PageResult;
@@ -9,13 +10,16 @@ import com.mei.service.UserShoppingCartService;
 import com.mei.vo.OrderPaymentVO;
 import com.mei.vo.OrderSubmitVO;
 import com.mei.vo.OrderVO;
+import com.mei.webSocket.WebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单
@@ -31,6 +35,9 @@ public class UserOrderController {
 
     @Autowired
     private UserShoppingCartService shoppingCartService;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -107,6 +114,19 @@ public class UserOrderController {
         ordersCancelDTO.setId(orderId);
         orderService.cancel(ordersCancelDTO);
 
+        return Result.success();
+    }
+
+    @ApiOperation("催单")
+    @GetMapping("/reminder/{id}")
+    public Result remind(@PathVariable("id") Long orderId) {
+        log.info("用户催单: {}", orderId);
+        String orderNumber = orderService.getOrderNumberById(orderId);
+        Map map = new HashMap();
+        map.put("type", 2);//消息类型，2表示催单
+        map.put("orderId", orderId);
+        map.put("content", "订单号：" + orderNumber);
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
         return Result.success();
     }
 

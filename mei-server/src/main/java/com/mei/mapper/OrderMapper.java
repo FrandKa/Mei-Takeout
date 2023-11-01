@@ -51,4 +51,7 @@ public interface OrderMapper {
 
     @Select("SELECT * from mei_take_out.orders WHERE status = #{status} AND order_time < #{ruleTime}")
     List<Orders> queryByStatusAndOrderTimeLT(Integer status, LocalDateTime ruleTime);
+
+    @Select("SELECT number from mei_take_out.orders WHERE id = #{orderId}")
+    String queryOrderNumberById(Long orderId);
 }
