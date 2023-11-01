@@ -10,4 +10,22 @@
         VALUES
         (#{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime})
     </insert>
+
+    <select id="queryListBetween" resultType="com.mei.entity.User">
+        SELECT *
+        FROM mei_take_out.user
+        WHERE create_time BETWEEN #{begin} AND #{end}
+    </select>
+
+    <select id="sumBefore" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM mei_take_out.user
+        WHERE create_time &lt; #{begin};
+    </select>
+
+    <select id="sumBetween" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM mei_take_out.user
+        WHERE create_time BETWEEN #{begin} AND #{end} ;
+    </select>
 </mapper>

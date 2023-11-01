@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mei.mapper.OrderMapper">
-
     <insert id="insert" parameterType="Orders" useGeneratedKeys="true" keyProperty="id">
         insert into orders
         (number, status, user_id, address_book_id, order_time, checkout_time, pay_method, pay_status, amount, remark,
@@ -96,6 +95,57 @@
         SELECT COUNT(*)
         FROM mei_take_out.orders
         WHERE status = #{status};
+    </select>
+
+    <select id="sumByTime" resultType="java.lang.Double">
+        SELECT SUM(amount)
+        FROM mei_take_out.orders
+        <where>
+            <if test="min != null">
+                AND order_time &gt; #{min}
+            </if>
+            <if test="max != null">
+                AND order_time &lt; #{max}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByTime" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM mei_take_out.orders
+        <where>
+            <if test="min != null">
+                AND order_time &gt; #{min}
+            </if>
+            <if test="max != null">
+                AND order_time &lt; #{max}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTopTen" resultType="com.mei.dto.GoodsSalesDTO">
+        SELECT SUM(od.number) as 'number', od.name as 'name'
+        FROM mei_take_out.order_detail od, mei_take_out.orders o
+        <where>
+            <if test="min != null">
+                AND o.order_time &gt; #{min}
+            </if>
+            <if test="max != null">
+                AND o.order_time &lt; #{max}
+            </if>
+            <if test="status != null">
+                AND o.status = #{status}
+            </if>
+        </where>
+        GROUP BY od.name
+        ORDER BY SUM(od.number) DESC
+        LIMIT 10;
     </select>
 
 </mapper>

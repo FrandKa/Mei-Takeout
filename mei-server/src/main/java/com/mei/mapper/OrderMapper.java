@@ -1,14 +1,16 @@
 package com.mei.mapper;
 
 import com.github.pagehelper.Page;
+import com.mei.dto.GoodsSalesDTO;
+import com.mei.dto.OrderWrapper;
 import com.mei.dto.OrdersCancelDTO;
 import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -54,4 +56,10 @@ public interface OrderMapper {
 
     @Select("SELECT number from mei_take_out.orders WHERE id = #{orderId}")
     String queryOrderNumberById(Long orderId);
+
+    Double sumByTime(OrderWrapper wrapper);
+
+    Integer countByTime(OrderWrapper totalWrapper);
+
+    List<GoodsSalesDTO> getTopTen(OrderWrapper wrapper);
 }

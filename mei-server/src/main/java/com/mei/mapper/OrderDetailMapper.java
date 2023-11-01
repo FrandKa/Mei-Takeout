@@ -1,7 +1,6 @@
 package com.mei.mapper;
 
 import com.mei.entity.OrderDetail;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

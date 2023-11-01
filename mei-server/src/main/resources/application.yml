@@ -70,3 +70,13 @@ mei:
 knife4j:
   basic:
     enable: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
