@@ -106,7 +106,8 @@ public class OrderServiceImpl implements OrderService {
         orderDetailMapper.insertBatch(orderDetailList);
 
         //清理购物车中的数据
-        shoppingCartMapper.deleteById(userId);
+        shoppingCartMapper.deleteAllByUserId(userId);
+        log.info("清空: {}", userId);
 
         //封装返回结果
         OrderSubmitVO orderSubmitVO = OrderSubmitVO.builder()
@@ -129,44 +130,16 @@ public class OrderServiceImpl implements OrderService {
         // 当前登录用户id
         Long userId = BaseContext.getCurrentId();
         User user = userMapper.queryById(userId);
-
-        //调用微信支付接口，生成预支付交易单
-        JSONObject jsonObject = weChatPayUtil.pay(
-                ordersPaymentDTO.getOrderNumber(), //商户订单号
-                new BigDecimal(0.01), //支付金额，单位 元
-                "苍穹外卖订单", //商品描述
-                user.getOpenid() //微信用户的openid
-        );
-
-        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
-            throw new OrderBusinessException("该订单已支付");
-        }
-
-        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
-        vo.setPackageStr(jsonObject.getString("package"));
-
-        return vo;
-    }
-
-    /**
-     * 支付成功，修改订单状态
-     *
-     * @param outTradeNo
-     */
-    public void paySuccess(String outTradeNo) {
-
-        // 根据订单号查询订单
-        Orders ordersDB = orderMapper.getByNumber(outTradeNo);
-
-        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
-        Orders orders = Orders.builder()
-                .id(ordersDB.getId())
-                .status(Orders.TO_BE_CONFIRMED)
-                .payStatus(Orders.PAID)
-                .checkoutTime(LocalDateTime.now())
-                .build();
+        String orderNumber = ordersPaymentDTO.getOrderNumber();
+        Integer payMethod = ordersPaymentDTO.getPayMethod();
+        Orders orders = orderMapper.getByNumber(orderNumber);
+        orders.setCheckoutTime(LocalDateTime.now());
+        orders.setStatus(Orders.REFUND);
+        orders.setPayStatus(Orders.PAID);
 
         orderMapper.update(orders);
+
+        return null;
     }
 
     @Override

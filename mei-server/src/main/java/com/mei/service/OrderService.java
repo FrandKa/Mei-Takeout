@@ -27,12 +27,6 @@ public interface OrderService {
      */
     OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception;
 
-    /**
-     * 支付成功，修改订单状态
-     * @param outTradeNo
-     */
-    void paySuccess(String outTradeNo);
-
     PageResult getHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 
     OrderVO getOrderDetail(Long orderId);
