@@ -14,6 +14,7 @@ import com.mei.exception.ShoppingCartBusinessException;
 import com.mei.mapper.*;
 import com.mei.result.PageResult;
 import com.mei.service.OrderService;
+import com.mei.utils.BaiduPositionUtil;
 import com.mei.utils.WeChatPayUtil;
 import com.mei.vo.OrderPaymentVO;
 import com.mei.vo.OrderStatisticsVO;
@@ -48,6 +49,8 @@ public class OrderServiceImpl implements OrderService {
     private AddressBookMapper addressBookMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private BaiduPositionUtil baiduPositionUtil;
 
     /**
      * 用户下单
@@ -84,6 +87,8 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Orders.PENDING_PAYMENT);
         order.setPayStatus(Orders.UN_PAID);
         order.setOrderTime(LocalDateTime.now());
+
+        baiduPositionUtil.checkOutOfRange(order.getAddress());
 
         //向订单表插入1条数据
         orderMapper.insert(order);

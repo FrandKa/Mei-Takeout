@@ -62,6 +62,9 @@ mei:
       access-key-secret: ${mei.aliyun.oss.access-key-secret}
       bucket-name: ${mei.aliyun.oss.bucket-name}
       endpoint: ${mei.aliyun.oss.endpoint}
+  baidu:
+    ak: ${mei.baidu.ak}
+    url: ${mei.baidu.url}
 
 knife4j:
   basic:
