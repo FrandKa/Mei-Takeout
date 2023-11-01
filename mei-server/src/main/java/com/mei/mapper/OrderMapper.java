@@ -45,4 +45,10 @@ public interface OrderMapper {
     Integer countStatus(Integer status);
 
     void rejectByOrderId(Long id, String rejectionReason);
+
+    @Select("SELECT * from mei_take_out.orders WHERE status = #{status}")
+    List<Orders> queryOrderByStatus(Integer status);
+
+    @Select("SELECT * from mei_take_out.orders WHERE status = #{status} AND order_time < #{ruleTime}")
+    List<Orders> queryByStatusAndOrderTimeLT(Integer status, LocalDateTime ruleTime);
 }

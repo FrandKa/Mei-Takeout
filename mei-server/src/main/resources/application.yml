@@ -32,6 +32,7 @@ logging:
         service: info
         controller: info
 
+
 mei:
   jwt:
     # 设置jwt签名加密时使用的秘钥
