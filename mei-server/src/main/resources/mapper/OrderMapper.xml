@@ -51,7 +51,7 @@
 
     <update id="cancel">
         UPDATE mei_take_out.orders
-        SET status = #{status}, cancel_time = NOW()
+        SET status = 6, cancel_time = NOW()
         <if test="cancelReason != null" >
             , cancel_reason = #{cancelReason}
         </if>

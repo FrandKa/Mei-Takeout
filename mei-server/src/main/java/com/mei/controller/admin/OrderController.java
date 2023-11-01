@@ -1,6 +1,7 @@
 package com.mei.controller.admin;
 
 import com.github.pagehelper.Page;
+import com.mei.dto.OrdersCancelDTO;
 import com.mei.dto.OrdersConfirmDTO;
 import com.mei.dto.OrdersPageQueryDTO;
 import com.mei.dto.OrdersRejectionDTO;
@@ -69,6 +70,33 @@ public class OrderController {
     public Result rejectOrder(@RequestBody OrdersRejectionDTO ordersRejectionDTO) {
         log.info("拒单: {}", ordersRejectionDTO);
         orderService.rejectOrder(ordersRejectionDTO);
+
+        return Result.success();
+    }
+
+    @ApiOperation("取消订单")
+    @PutMapping("/cancel")
+    public Result cancelOrder(@RequestBody OrdersCancelDTO ordersCancelDTO) {
+        log.info("取消订单: {}", ordersCancelDTO);
+        orderService.cancel(ordersCancelDTO);
+
+        return Result.success();
+    }
+
+    @ApiOperation("完成订单")
+    @PutMapping("/complete/{id}")
+    public Result completeOrder(@PathVariable("id") Long id) {
+        log.info("取消订单: {}", id);
+        orderService.completeOrder(id);
+
+        return Result.success();
+    }
+
+    @ApiOperation("派送订单")
+    @PutMapping("/delivery/{id}")
+    public Result deliveryOrder(@PathVariable("id") Long id) {
+        log.info("派送订单: {}", id);
+        orderService.deliveryOrder(id);
 
         return Result.success();
     }

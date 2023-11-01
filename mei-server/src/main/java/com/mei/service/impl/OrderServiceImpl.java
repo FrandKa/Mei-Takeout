@@ -251,4 +251,14 @@ public class OrderServiceImpl implements OrderService {
         String rejectionReason = ordersRejectionDTO.getRejectionReason();
         orderMapper.rejectByOrderId(orderId, rejectionReason);
     }
+
+    @Override
+    public void completeOrder(Long id) {
+        orderMapper.updateStatusById(id, Orders.COMPLETED);
+    }
+
+    @Override
+    public void deliveryOrder(Long id) {
+        orderMapper.updateStatusById(id, Orders.DELIVERY_IN_PROGRESS);
+    }
 }
