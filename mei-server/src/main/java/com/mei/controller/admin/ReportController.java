@@ -11,11 +11,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileUrlResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 
 /**
@@ -104,6 +112,16 @@ public class ReportController {
         return Result.success(vo);
     }
 
+    /**
+     * 导出报表
+     */
+    @ApiOperation("数据导出为excel")
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) {
+        // 导出最近30天的
+        log.info("数据导出");
+        reportService.export(response);
+    }
 }
 
 

@@ -6,15 +6,20 @@ import com.mei.entity.Orders;
 import com.mei.mapper.OrderMapper;
 import com.mei.mapper.UserMapper;
 import com.mei.service.ReportService;
-import com.mei.vo.OrderReportVO;
-import com.mei.vo.SalesTop10ReportVO;
-import com.mei.vo.TurnoverReportVO;
-import com.mei.vo.UserReportVO;
+import com.mei.service.WorkspaceService;
+import com.mei.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,6 +39,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private WorkspaceService workspaceService;
 
     @Override
     public TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end) {
@@ -146,6 +154,72 @@ public class ReportServiceImpl implements ReportService {
                 .nameList(StringUtils.join(nameList, ","))
                 .numberList(StringUtils.join(numberList, ","))
                 .build();
+    }
+
+    /**
+     * 导出数据报表
+     * @param response
+     */
+    @Override
+    @Transactional
+    public void export(HttpServletResponse response) {
+        try {
+            InputStream ips = this.getClass().getClassLoader().getResourceAsStream("export/export.xlsx");
+            XSSFWorkbook excel = new XSSFWorkbook(ips);
+            XSSFSheet sheet1 = excel.getSheet("Sheet1");
+            // 准备时间(30天)
+            LocalDate begin = LocalDate.now().minusDays(30);
+            LocalDate end = LocalDate.now().minusDays(1);
+            LocalDateTime max = LocalDateTime.of(begin, LocalTime.MAX);
+            LocalDateTime min = LocalDateTime.of(begin, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+            // 设置时间
+            sheet1.getRow(1).getCell(1).setCellValue("时间: " + begin + " 至 " + end);
+            // 获取概览数据:
+            BusinessDataVO totalData = workspaceService.getBusinessData(min, endTime);
+            XSSFRow r4 = sheet1.getRow(3);
+            r4.getCell(2).setCellValue(totalData.getTurnover());
+            r4.getCell(4).setCellValue(totalData.getOrderCompletionRate());
+            r4.getCell(6).setCellValue(totalData.getNewUsers());
+            XSSFRow r5 = sheet1.getRow(4);
+            r5.getCell(2).setCellValue(totalData.getValidOrderCount());
+            r5.getCell(4).setCellValue(totalData.getUnitPrice());
+
+            // 获取明细数据:
+            int row = 7;
+
+            while(!min.isAfter(endTime)) {
+                BusinessDataVO businessData = workspaceService.getBusinessData(min, max);
+                setDetailData(sheet1.getRow(row), begin, businessData);
+                // 下一天:
+                row += 1;
+                begin = begin.plusDays(1);
+                min = min.plusDays(1);
+                max = max.plusDays(1);
+            }
+
+            ServletOutputStream servletOutputStream = response.getOutputStream();
+            excel.write(servletOutputStream);
+            servletOutputStream.close();
+            excel.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 设置指定行的数据
+     * @param row
+     * @param date
+     * @param data
+     */
+    private void setDetailData(XSSFRow row, LocalDate date, BusinessDataVO data) {
+        row.getCell(1).setCellValue(String.valueOf(date));
+        row.getCell(2).setCellValue(String.valueOf(data.getTurnover()));
+        row.getCell(3).setCellValue(String.valueOf(data.getValidOrderCount()));
+        row.getCell(4).setCellValue(String.valueOf(data.getOrderCompletionRate()));
+        row.getCell(5).setCellValue(String.valueOf(data.getUnitPrice()));
+        row.getCell(6).setCellValue(String.valueOf(data.getNewUsers()));
     }
 }
 
