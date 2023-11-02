@@ -62,4 +62,7 @@ public interface OrderMapper {
     Integer countByTime(OrderWrapper totalWrapper);
 
     List<GoodsSalesDTO> getTopTen(OrderWrapper wrapper);
+
+    @Select("SELECT * FROM mei_take_out.orders WHERE amount < 100 ;")
+    void count();
 }
