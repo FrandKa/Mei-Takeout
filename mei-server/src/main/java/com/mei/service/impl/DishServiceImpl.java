@@ -117,6 +117,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional
     public void update(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);

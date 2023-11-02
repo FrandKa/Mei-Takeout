@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +41,7 @@ public class SetMealServiceImpl implements SetMealService {
     private CategoryMapper categoryMapper;
 
     @Override
+    @Transactional
     public void saveSetzMeal(SetmealDTO setmealDTO) {
         // 1. 存储套餐的基本信息:
         Setmeal setmeal = new Setmeal();
@@ -86,6 +88,7 @@ public class SetMealServiceImpl implements SetMealService {
     }
 
     @Override
+    @Transactional
     public void update(SetmealDTO setmealDTO) {
         Long id = setmealDTO.getId();
         Setmeal setmeal = new Setmeal();
@@ -128,6 +131,7 @@ public class SetMealServiceImpl implements SetMealService {
     }
 
     @Override
+    @Transactional
     public void delete(List<Long> ids) {
         // 删除基本数据:
         setMealMapper.delete(ids);
