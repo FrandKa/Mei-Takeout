@@ -131,7 +131,9 @@
 
     <select id="getTopTen" resultType="com.mei.dto.GoodsSalesDTO">
         SELECT SUM(od.number) as 'number', od.name as 'name'
-        FROM mei_take_out.order_detail od, mei_take_out.orders o
+        FROM mei_take_out.orders o
+        LEFT JOIN mei_take_out.order_detail od
+        ON od.order_id = o.id
         <where>
             <if test="min != null">
                 AND o.order_time &gt; #{min}
@@ -143,9 +145,8 @@
                 AND o.status = #{status}
             </if>
         </where>
-        GROUP BY od.name
+        GROUP BY name
         ORDER BY SUM(od.number) DESC
-        LIMIT 10;
     </select>
 
 </mapper>

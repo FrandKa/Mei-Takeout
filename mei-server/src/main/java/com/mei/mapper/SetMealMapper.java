@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetMealMapper {
@@ -45,4 +46,11 @@ public interface SetMealMapper {
     void updateStatusById(Long id, Integer status);
 
     void delete(List<Long> ids);
+
+    /**
+     * 根据条件统计套餐数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
